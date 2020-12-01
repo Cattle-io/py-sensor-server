@@ -1,12 +1,18 @@
-# mysite/routing.py
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
+
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 import sockets.routing
 
+from sockets.consumers import PacketsSocketsConsumer
+
+
 application = ProtocolTypeRouter({
-    # (http->django views is added by default)
-    'websocket': URLRouter(
-            sockets.routing.websocket_urlpatterns
-    )
-  
+    'websocket': URLRouter([
+        path('ws/packets/<slug:chatname>/', PacketsSocketsConsumer),
+    ])
 })
+
+

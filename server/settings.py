@@ -141,11 +141,13 @@ STATIC_URL = '/static/'
 # CHANNELS
 ASGI_APPLICATION = 'server.routing.application'
 CHANNEL_LAYERS = {
-    "default": { 
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
     },
 }
-
 
 
 

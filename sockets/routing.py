@@ -1,8 +1,16 @@
-# socket/routing.py
-from django.urls import re_path
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
 
-from sockets import consumers
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+import sockets.routing
 
-websocket_urlpatterns = [
-    re_path(r'ws/sockets/(?P<room_name>\w+)/$', consumers.SocketConsumer),
-]
+from sockets.consumers import PacketsSocketsConsumer
+
+
+application = ProtocolTypeRouter({
+    'websocket': URLRouter([
+        path('ws/packets/<slug:chatname>/', PacketsSocketsConsumer),
+    ])
+})

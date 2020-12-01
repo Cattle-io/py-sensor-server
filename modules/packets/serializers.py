@@ -48,5 +48,5 @@ class PacketsIMUSerializer(serializers.ModelSerializer):
 class PacketsCH4Serializer(serializers.ModelSerializer):
     class Meta:
         model = PacketCH4
-        fields = ('id', 'name', 'ch4_ppm', 'raw', 'experiment_id', 'device_id',
+        fields = ('id', 'name','raw', 'ch4_ppm', 'ch4_adc' , 'experiment_id', 'device_id',
                   'timestamp')

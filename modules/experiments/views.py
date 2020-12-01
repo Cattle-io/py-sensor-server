@@ -3,7 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from datetime import datetime
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 from modules.experiments.models import Experiment
 from modules.experiments.serializers import ExperimentsSerializer
 
@@ -26,8 +27,8 @@ def method_post(data):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def method_patch(id, data):
-    animal = Experiment.objects.get(id=id)
-    serializer = ExperimentsSerializer(animal, data=data, partial=True)
+    experiment = Experiment.objects.get(id=id)
+    serializer = ExperimentsSerializer(experiment, data=data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         return Response(serializer.validated_data)
@@ -62,3 +63,28 @@ def module_crud_id(request, id):
         return method_patch(id, request.data)
     if request.method == 'DELETE':
         return method_delete(id)
+
+
+@csrf_exempt
+def do_play_by_id(request, experiment_id):
+    data = { 'status' : 'PLAY' }
+    experiment = Experiment.objects.get(id=experiment_id)
+    serializer = ExperimentsSerializer(experiment, data=data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return JsonResponse(data)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@csrf_exempt
+def do_pause_by_id(request, experiment_id):
+    data = { 'status' : 'PAUSE' }
+    experiment = Experiment.objects.get(id=experiment_id)
+    serializer = ExperimentsSerializer(experiment, data=data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return JsonResponse(data)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

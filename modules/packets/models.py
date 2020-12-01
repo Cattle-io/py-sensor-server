@@ -49,5 +49,6 @@ class PacketIMU(Packet):
 class PacketCH4(Packet):
     name = 'CH4'
     ch4_ppm = models.CharField(max_length=200, default=' ')
+    ch4_adc = models.CharField(max_length=200, default=' ')
 
 
